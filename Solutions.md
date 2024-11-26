@@ -32,6 +32,7 @@ This project analyzes user interactions with Wikipedia pages, recorded in the Wi
     .load()
 ```
 ![alt text](</WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task1.png>)
+<img width="934" alt="Lab_Exercise1_Task1" src="https://github.com/user-attachments/assets/7b886253-f38f-491d-9f5b-486ef268741d">
 
 ## Task 2:
 
