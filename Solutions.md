@@ -31,7 +31,7 @@ This project analyzes user interactions with Wikipedia pages, recorded in the Wi
     .option("filter", "datehour >= '2020-03-01' AND datehour < '2020-03-02'") \
     .load()
 ```
-![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task1.png>)
+![alt text](</WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task1.png>)
 
 ## Task 2:
 
@@ -43,7 +43,7 @@ This project analyzes user interactions with Wikipedia pages, recorded in the Wi
   .cache()
 df_wiki_en
 ```
-![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task2.png>)
+![alt text](</WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task2.png>)
 
 
 ## Task 3:
