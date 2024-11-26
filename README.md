@@ -1,4 +1,4 @@
-Create Spark Session
+## Create Spark Session
 Include the correct version of the spark-bigquery-connector jar
 
 Scala version 2.11 - 'gs://spark-lib/bigquery/spark-bigquery-latest.jar'.
