@@ -1,88 +1,136 @@
-# DATA-ENGINEERING-LAB-4
+Create Spark Session
+Include the correct version of the spark-bigquery-connector jar
 
-Lab Exercise 1: Analyzing Wikipedia Pageviews
+Scala version 2.11 - 'gs://spark-lib/bigquery/spark-bigquery-latest.jar'.
 
-**Dataset Overview**
-The Wikipedia Pageviews dataset records user interactions with Wikipedia pages, including:
-*Date
-*Time
-*Language
-*Title
-*View Counts
+Scala version 2.12 - 'gs://spark-lib/bigquery/spark-bigquery-latest_2.12.jar'.
 
-This dataset provides insights into web traffic, user behavior, and content trends. Students can analyze traffic patterns, evaluate topics, and practice big data techniques to derive actionable insights from large-scale datasets.
+from pyspark.sql import SparkSession
+spark = SparkSession.builder \
+  .appName('1.1. BigQuery Storage & Spark DataFrames - Python')\
+  .config('spark.jars', 'gs://spark-lib/bigquery/spark-bigquery-latest.jar') \
+  .getOrCreate()
+Enable repl.eagerEval
+This will output the results of DataFrames in each step without the new need to show df.show() and also improves the formatting of the output
 
-**Prerequisites**
+spark.conf.set("spark.sql.repl.eagerEval.enabled",True)
+Read BigQuery table into Spark DataFrame
+Use filter() to query data from a partitioned table.
 
-Create a Dataproc cluster with Jupyter & Component Gateway on Google Cloud Platform (GCP).
+table = "bigquery-public-data.wikipedia.pageviews_2020"
+df_wiki_pageviews = spark.read \
+  .format("bigquery") \
+  .option("table", table) \
+  .option("filter", "datehour >= '2020-03-01' AND datehour < '2020-03-02'") \
+  .load()
 
+df_wiki_pageviews.printSchema()
+root
+ |-- datehour: timestamp (nullable = true)
+ |-- wiki: string (nullable = true)
+ |-- title: string (nullable = true)
+ |-- views: long (nullable = true)
 
-**Objective**
+Select required columns and apply a filter using where() which is an alias for filter() then cache the table
 
-By the end of this lab, you will be able to:
-Use Spark DataFrames and SQL to retrieve and manipulate Wikipedia page views data.
-Write the data to BigQuery (a data warehouse on GCP) and query the data for insights.
+df_wiki_en = df_wiki_pageviews \
+  .select("title", "wiki", "views") \
+  .where("views > 1000 AND wiki in ('en', 'en.m')") \
+  .cache()
 
-**Tasks**
+df_wiki_en
+title	wiki	views
+2020_Democratic_P...	en	3242
+Eurovision_Song_C...	en	2368
+Colin_McRae	en	2360
+Donald_trump	en	2223
+Comparison_of_onl...	en	1398
+Coronavirus	en	1872
+-	en	136620
+Bombshell_(2019_f...	en	1084
+Brooklyn	en	1946
+2019–20_coronavir...	en	8313
+2019–20_Wuhan_cor...	en	1084
+Apple_Network_Server	en	3524
+Catholic_moral_th...	en	1328
+Bernie_Sanders	en	1297
+2019–20_coronavir...	en	1968
+Brooklyn	en	1139
+Charlie's_Angels_...	en	1006
+Corrupted_Blood_i...	en	1511
+Donald_trump	en	1526
+Coronavirus_disea...	en	1405
+only showing top 20 rows
+Group by title and order by page views to see the top pages
 
-Follow the instructions on the provided link to complete the tasks:
+import pyspark.sql.functions as F
 
-**Read the BigQuery table into a Spark DataFrame.**
+df_wiki_en_totals = df_wiki_en \
+.groupBy("title") \
+.agg(F.sum('views').alias('total_views'))
 
-Filter for the English version of Wikipedia for both desktop and mobile versions ('en' and 'en.m') with more than 100 views.
-Group by title and order by page views to see the top pages.
-Write the Spark DataFrame to a BigQuery table.
-Retrieve the top 10 most-viewed pages where the title contains the word "United."
-Perform the same transformations using Spark SQL.
-Visualize the total views across datehour using Pandas plotting.
+df_wiki_en_totals.orderBy('total_views', ascending=False)
+title	total_views
+Main_Page	10939337
+United_States_Senate	5619797
+-	3852360
+Special:Search	1538334
+2019–20_coronavir...	407042
+2020_Democratic_P...	260093
+Coronavirus	254861
+The_Invisible_Man...	233718
+Super_Tuesday	201077
+Colin_McRae	200219
+David_Byrne	189989
+2019–20_coronavir...	156803
+John_Mulaney	155605
+2020_South_Caroli...	152137
+AEW_Revolution	140503
+Boris_Johnson	120957
+Tom_Steyer	120926
+Dyatlov_Pass_inci...	117704
+Spanish_flu	108335
+2020_coronavirus_...	107653
+only showing top 20 rows
+Write Spark Dataframe to BigQuery table
+Write the Spark Dataframe to BigQuery table using BigQuery Storage connector. This will also create the table if it does not exist. The GCS bucket and BigQuery dataset must already exist.
 
-**Additional Resources**
+If the GCS bucket and BigQuery dataset do not exist they will need to be created before running df.write
 
+Instructions here for creating a GCS bucket
+Instructions here for creating a BigQuery Dataset
+# Update to your GCS bucket
+gcs_bucket = 'dataproc-bucket-name'
 
-Repo Instructions Page (https://github.com/GoogleCloudDataproc/cloud-dataproc/blob/master/notebooks/python/1.1.%20BigQuery%20Storage%20%26%20Spark%20DataFrames%20-%20Python.ipynb)
+# Update to your BigQuery dataset name you created
+bq_dataset = 'dataset_name'
 
-Steps to Use Spark SQL (https://github.com/GoogleCloudDataproc/cloud-dataproc/blob/master/notebooks/python/1.2.%20BigQuery%20Storage%20%26%20Spark%20SQL%20-%20Python.ipynb)
+# Enter BigQuery table name you want to create or overwite. 
+# If the table does not exist it will be created when you run the write function
+bq_table = 'wiki_total_pageviews'
 
-Steps to Pandas Plotting (https://github.com/GoogleCloudDataproc/cloud-dataproc/blob/master/notebooks/python/3.1.%20Spark%20DataFrame%20%26%20Pandas%20Plotting%20-%20Python.ipynb)
+df_wiki_en_totals.write \
+  .format("bigquery") \
+  .option("table","{}.{}".format(bq_dataset, bq_table)) \
+  .option("temporaryGcsBucket", gcs_bucket) \
+  .mode('overwrite') \
+  .save()
+Use BigQuery magic to query table
+Use the BigQuery magic to check if the data was created successfully in BigQuery. This will run the SQL query in BigQuery and the return the results
 
-
-****Lab Exercise 2:****
-
-**Creating a Streaming Data Pipeline with Kafka
-
-Overview**
-
-In this provisioned lab environment, you will create a streaming data pipeline using Kafka, providing a hands-on look at the Kafka Streams API. You will run a Java application that showcases a simple end-to-end data pipeline powered by Apache Kafka.
-
-
-**Prerequisites**
-
-An account on Cloud Skills Boost(https://www.cloudskillsboost.google/).
-
-
-**Objective**
-
-By the end of this lab, you will be able to:
-Start a Kafka cluster on a Compute Engine single machine.
-Write example input data to a Kafka topic using the console producer included in Kafka.
-Process the input data and inspect the output data using the console consumer.
-
-Setup and Requirements
-
-Before you click the Start Lab button, read and follow the instructions. The lab is timed, and you cannot pause it.
-
-
-**Tasks**
-
-Follow the instructions on the provided link to complete the tasks:
-
-**Set up Kafka.**
-
-Prepare the topics and the input data.
-Process the input data with Kafka Streams.
-Inspect the output data.
-Stop the Kafka cluster.
-
-Additional Resources
-
-Link to Lab (https://www.cloudskillsboost.google/course_templates/703/labs/502033)
+%%bigquery
+SELECT title, total_views
+FROM dataset_name.wiki_total_pageviews
+ORDER BY total_views DESC
+LIMIT 10
+title	total_views
+0	Main_Page	10939337
+1	United_States_Senate	5619797
+2	-	3852360
+3	Special:Search	1538334
+4	2019–20_coronavirus_outbreak	407042
+5	2020_Democratic_Party_presidential_primaries	260093
+6	Coronavirus	254861
+7	The_Invisible_Man_(2020_film)	233718
+8	Super_Tuesday	201077
+9	Colin_McRae	200219
