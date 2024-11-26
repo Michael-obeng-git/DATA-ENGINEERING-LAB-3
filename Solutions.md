@@ -17,7 +17,8 @@ This project analyzes user interactions with Wikipedia pages, recorded in the Wi
   |-- title: string (nullable = true)
   
   |-- views: long (nullable = true)
-
+  
+## EXERCISE 1
 
 ## Task 1: 
 
@@ -30,7 +31,7 @@ This project analyzes user interactions with Wikipedia pages, recorded in the Wi
     .option("filter", "datehour >= '2020-03-01' AND datehour < '2020-03-02'") \
     .load()
 ```
-![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task1>)
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task1.png>)
 
 ## Task 2:
 
@@ -42,7 +43,7 @@ This project analyzes user interactions with Wikipedia pages, recorded in the Wi
   .cache()
 df_wiki_en
 ```
-![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task2>)
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task2.png>)
 
 
 ## Task 3:
@@ -58,7 +59,7 @@ df_wiki_en_totals = df_wiki_en \
 
 df_wiki_en_totals.orderBy('total_views', ascending=False)
 ```
-![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task3>)
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task3.png>)
 
 - From the table, we can see that the most viewed pages are mostly related to Wikipedia's main page, with a total view of 10939337.
 
@@ -82,7 +83,7 @@ df_wiki_en_totals.orderBy('total_views', ascending=False)
   .mode('overwrite') \
   .save()
 ```
-![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task4>)
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task4.png>)
 
 ## Task 5: 
 
@@ -96,7 +97,7 @@ df_wiki_en_totals.orderBy('total_views', ascending=False)
       LIMIT 10
 ```
 
-![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task5>)
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task5.png>)
 
 
 ## Task 6:
@@ -120,7 +121,7 @@ df_wiki_en.createOrReplaceTempView("wiki_en")
     """).cache()
     df_wiki_en
 ```
-![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task6a>)
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task6a.png>)
 
 
 ### Query to group the views by title from the wiki_en temporary view and orders the results by the total views in descending order
@@ -136,7 +137,7 @@ df_wiki_en.createOrReplaceTempView("wiki_en")
     """)
     df_wiki_en_totals
  ```
- ![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task6b>)
+ ![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task6b.png>)
 
  - The same results is obtained as the previous Dataframe operation (Grouping by title and order by page views to see the top pages). The results are ordered by total views in descending order.
 
@@ -168,7 +169,7 @@ df_wiki_en.createOrReplaceTempView("wiki_en")
     df_wiki_en
 ```
 
-![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task6b>)
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task6b.png>)
 
 - The results are filtered to include only the rows where views are greater than 100 and the wiki is in english version, where `2020-03-01 16:00:00` in english version has the most views with 143159.
 
@@ -181,7 +182,7 @@ df_wiki_en.createOrReplaceTempView("wiki_en")
   .agg(F.sum('views').alias('total_views'))
   df_datehour_totals.orderBy('total_views', ascending=False)
 ```
-![alt text](<WIKIPEDIA LAB\Lab Exercise 1/grouping total views>)
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/grouping total views.png>)
 
 - The results are ordered by total views in descending order. The results show the total views for each datehour and `2020-03-01 21:00:00` has the highest total views of 1642981.
 
@@ -196,7 +197,7 @@ df_wiki_en.createOrReplaceTempView("wiki_en")
   pandas_datehour_totals.set_index('datehour', inplace=True)
   pandas_datehour_totals.head()
 ```
-![alt text](<WIKIPEDIA LAB\Lab Exercise 1/spark_dataframe_pandas_dataframe>)
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/spark_dataframe_pandas_dataframe.png>)
 
 
 - Converting to pandas DataFrame and setting the datehour as the index. The results show the total views for each datehour to be able to plot the data using matplotlib.
@@ -208,7 +209,7 @@ import matplotlib.pyplot as plt
   pandas_datehour_totals.plot(kind='line',figsize=(12,6));
 ```
 
-![alt text](Images/total_vies_by_datehour.png)
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task7.png>)
 
 - From the graph , we can see that the total views are highest at `2020-03-01 21` with reference from the table (Refer to the grouping total views.png), `2020-03-01 21` has the highest total views of 1642981.
 
@@ -247,4 +248,58 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
 
 - Traffic for en generally decreases during early hours (around 03-01 06) and then starts to rise later in the day.Traffic for en.m spikes significantly early in the day (03-01 06) and then dips, eventually surpassing desktop traffic during the later hours.There is an interesting crossover point where en.m traffic overtakes en traffic.
 
+
+
+# EXERCISE 2
+
+
+
+- Opening an interactive shell with your docker container using command prompt
+
+- Running containers 
+
+```bash
+  docker exec -it <container-id> /bin/bash
+```
+![alt text](<WIKIPEDIA LAB\Lab Exercise 2/Lab_Exercise2_Task1>)
+
+
+- To see all topics, run
+```bash
+  kafka-topics --list --bootstrap-server localhost:29092
+```
+![alt text](<WIKIPEDIA LAB\Lab Exercise 2/all_topics>)
+
+
+**Writing Spark to read the device data from the topic and writing it a console sink**
+- A running Docker container named ed-spark-jupyter-lab (or equivalent) for Spark and Jupyter Lab to be able to start the Spark session in the Jupyter Lab.
+
+```bash
+  kafka-console-producer --topic device-data --bootstrap-server localhost:29092
+```
+**Sample JSON data in the opened terminal**
+
+```bash
+  {"eventId": "1f547fd-e335-457e-9a1f-686cfbe903e3", "eventOffset": 10013, "eventPublisher": "device", "customerId": "CI00103", "data": {"devices": [{"deviceId": "D004", "temperature": 23, "measure": "C", "status": "SUCCESS"}]}, "eventTime": "2023-01-05 11:13:53.643895"}  {"eventId": "692e9999-1110-4441-a20e-fd76692e2c17", "eventOffset": 10014, "eventPublisher": "device", "customerId": "CI00109", "data": {"devices": [{"deviceId": "D003", "temperature": 18, "measure": "C", "status": "ERROR"}]}, "eventTime": 
+```
+![alt text](<WIKIPEDIA LAB\Lab Exercise 2/Lab_Exercise2_Task2>)
+
+- Execute the code to create the kafka_df dataframe
+ 
+
+**Adding more data**
+```bash
+{"eventId": "a25e37a0-1488-411c-bb6d-f3f14e9bdd39", "eventOffset": 10061, "eventPublisher": "device", "customerId": "CI00115", "data": {"devices": [{"deviceId": "D004", "temperature": 27, "measure": "C", "status": "STANDBY"}, {"deviceId": "D003", "temperature": 4, "measure": "C", "status": "STANDBY"}, {"deviceId": "D003", "temperature": 12, "measure": "C", "status": "STANDBY"}]}, "eventTime": "2023-01-05 11:13:53.650859"}
+{"eventId": "0468eae2-156e-4aa0-b730-b8d661b6f075", "eventOffset": 10073, "eventPublisher": "device", "customerId": "CI00119", "data": {"devices": []}, "eventTime": "2023-01-05 11:13:53.650859"}
+```
+
+![alt text](<WIKIPEDIA LAB\Lab Exercise 2/Lab_Exercise2_Task3.png>)
+
+
+- Run the rest of the code in the 03_reading_from_kafka.ipynb script and write the output to console sink to check the output (the last block of code)
+- 
+  ![alt text](<WIKIPEDIA LAB\Lab Exercise 2/interactive.png>)
+
+### All bash commands executed
+![alt text](<WIKIPEDIA LAB\Lab Exercise 2/all_in_one.png>)
 
