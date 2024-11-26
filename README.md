@@ -22,7 +22,9 @@ Create a Dataproc cluster with Jupyter & Component Gateway on Google Cloud Platf
 By the end of this lab, you will be able to:
 Use Spark DataFrames and SQL to retrieve and manipulate Wikipedia page views data.
 Write the data to BigQuery (a data warehouse on GCP) and query the data for insights.
-Tasks
+
+**Tasks**
+
 Follow the instructions on the provided link to complete the tasks:
 
 **Read the BigQuery table into a Spark DataFrame.**
