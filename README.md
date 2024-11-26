@@ -9,12 +9,15 @@ The Wikipedia Pageviews dataset records user interactions with Wikipedia pages, 
 *Language
 *Title
 *View Counts
+
 This dataset provides insights into web traffic, user behavior, and content trends. Students can analyze traffic patterns, evaluate topics, and practice big data techniques to derive actionable insights from large-scale datasets.
 
 **Prerequisites**
+
 Create a Dataproc cluster with Jupyter & Component Gateway on Google Cloud Platform (GCP).
 
 **Objective**
+
 By the end of this lab, you will be able to:
 Use Spark DataFrames and SQL to retrieve and manipulate Wikipedia page views data.
 Write the data to BigQuery (a data warehouse on GCP) and query the data for insights.
@@ -22,6 +25,7 @@ Tasks
 Follow the instructions on the provided link to complete the tasks:
 
 **Read the BigQuery table into a Spark DataFrame.**
+
 Filter for the English version of Wikipedia for both desktop and mobile versions ('en' and 'en.m') with more than 100 views.
 Group by title and order by page views to see the top pages.
 Write the Spark DataFrame to a BigQuery table.
@@ -30,6 +34,7 @@ Perform the same transformations using Spark SQL.
 Visualize the total views across datehour using Pandas plotting.
 
 **Additional Resources**
+
 Repo Instructions Page (https://github.com/GoogleCloudDataproc/cloud-dataproc/blob/master/notebooks/python/1.1.%20BigQuery%20Storage%20%26%20Spark%20DataFrames%20-%20Python.ipynb)
 Steps to Use Spark SQL (https://github.com/GoogleCloudDataproc/cloud-dataproc/blob/master/notebooks/python/1.2.%20BigQuery%20Storage%20%26%20Spark%20SQL%20-%20Python.ipynb)
 Steps to Pandas Plotting (https://github.com/GoogleCloudDataproc/cloud-dataproc/blob/master/notebooks/python/3.1.%20Spark%20DataFrame%20%26%20Pandas%20Plotting%20-%20Python.ipynb)
