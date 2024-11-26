@@ -32,7 +32,7 @@ This project analyzes user interactions with Wikipedia pages, recorded in the Wi
     .load()
 ```
 ![alt text](</WIKIPEDIA LAB/Lab Exercise 1/Lab_Exercise1_Task1.png>)
-<img width="934" alt="Lab_Exercise1_Task1" src="https://github.com/user-attachments/assets/7b886253-f38f-491d-9f5b-486ef268741d">
+
 
 ## Task 2:
 
@@ -112,7 +112,7 @@ df_wiki_en_totals.orderBy('total_views', ascending=False)
 df_wiki_en.createOrReplaceTempView("wiki_en")
 ```
 
-### Using Spark SQL to query the wiki_pageviews temporary view and filter the results based on specific conditions where views is greater than 1000 and wiki is in english version
+### Using Spark SQL to query the wiki_pageviews temporary view and filter the results based on specific conditions where views is greater than 100 and wiki is in english version
 
 ```python
   df_wiki_en = spark.sql("""
@@ -171,7 +171,7 @@ df_wiki_en.createOrReplaceTempView("wiki_en")
     df_wiki_en
 ```
 
-![alt text](<WIKIPEDIA LAB/Lab Exercise 1/Lab_Exercise1_Task6b.png>)
+![alt text](<WIKIPEDIA LAB/Lab Exercise 1/filtering_for_english_version.png>)
 
 - The results are filtered to include only the rows where views are greater than 100 and the wiki is in english version, where `2020-03-01 16:00:00` in english version has the most views with 143159.
 
@@ -263,14 +263,14 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
 ```bash
   docker exec -it <container-id> /bin/bash
 ```
-![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Lab_Exercise2_Task1>)
+![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Lab_Exercise2_Task1.png>)
 
 
 - To see all topics, run
 ```bash
   kafka-topics --list --bootstrap-server localhost:29092
 ```
-![alt text](<WIKIPEDIA LAB/Lab Exercise 2/all_topics>)
+![alt text](<WIKIPEDIA LAB/Lab Exercise 2/all_topics.png>)
 
 
 **Writing Spark to read the device data from the topic and writing it a console sink**
@@ -284,7 +284,7 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
 ```bash
   {"eventId": "1f547fd-e335-457e-9a1f-686cfbe903e3", "eventOffset": 10013, "eventPublisher": "device", "customerId": "CI00103", "data": {"devices": [{"deviceId": "D004", "temperature": 23, "measure": "C", "status": "SUCCESS"}]}, "eventTime": "2023-01-05 11:13:53.643895"}  {"eventId": "692e9999-1110-4441-a20e-fd76692e2c17", "eventOffset": 10014, "eventPublisher": "device", "customerId": "CI00109", "data": {"devices": [{"deviceId": "D003", "temperature": 18, "measure": "C", "status": "ERROR"}]}, "eventTime": 
 ```
-![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Lab_Exercise2_Task2>)
+![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Lab_Exercise2_Task2.png>)
 
 - Execute the code to create the kafka_df dataframe
  
