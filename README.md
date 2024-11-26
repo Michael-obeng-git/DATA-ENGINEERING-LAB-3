@@ -1,68 +1,55 @@
-## Create Spark Session
-Include the correct version of the spark-bigquery-connector jar
+# WEEK-4-LAB-WIKIPEDIA-PAGEVIEW
 
-Scala version 2.11 - 'gs://spark-lib/bigquery/spark-bigquery-latest.jar'.
 
-Scala version 2.12 - 'gs://spark-lib/bigquery/spark-bigquery-latest_2.12.jar'.
+# Wikipedia Pageviews Analysis with Apache Spark on Dataproc
 
-from pyspark.sql import SparkSession
-spark = SparkSession.builder \
-  .appName('1.1. BigQuery Storage & Spark DataFrames - Python')\
-  .config('spark.jars', 'gs://spark-lib/bigquery/spark-bigquery-latest.jar') \
-  .getOrCreate()
-Enable repl.eagerEval
-This will output the results of DataFrames in each step without the new need to show df.show() and also improves the formatting of the output
+## Overview
 
-spark.conf.set("spark.sql.repl.eagerEval.enabled",True)
-Read BigQuery table into Spark DataFrame
-Use filter() to query data from a partitioned table.
+This project analyzes user interactions with Wikipedia pages, recorded in the Wikipedia Pageviews dataset. The data contains records of page views, including details such as date, time, language, title, and view counts. 
 
-table = "bigquery-public-data.wikipedia.pageviews_2020"
-df_wiki_pageviews = spark.read \
-  .format("bigquery") \
-  .option("table", table) \
-  .option("filter", "datehour >= '2020-03-01' AND datehour < '2020-03-02'") \
-  .load()
+### Schema of the Data
+  root
 
-df_wiki_pageviews.printSchema()
-root
- |-- datehour: timestamp (nullable = true)
- |-- wiki: string (nullable = true)
- |-- title: string (nullable = true)
- |-- views: long (nullable = true)
+  |-- datehour: timestamp (nullable = true)
 
-Select required columns and apply a filter using where() which is an alias for filter() then cache the table
+  |-- wiki: string (nullable = true)
 
-df_wiki_en = df_wiki_pageviews \
+  |-- title: string (nullable = true)
+  
+  |-- views: long (nullable = true)
+
+
+## Task 1: 
+
+### Using Apache Spark to load the Wikipedia pageviews data from a BigQuery table into a Spark DataFrame.
+```python
+  table = "bigquery-public-data.wikipedia.pageviews_2020"
+  df_wiki_pageviews = spark.read \
+    .format("bigquery") \
+    .option("table", table) \
+    .option("filter", "datehour >= '2020-03-01' AND datehour < '2020-03-02'") \
+    .load()
+```
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task1>)
+
+## Task 2:
+
+### Filtering the dataset to include only the English versions of Wikipedia (language code 'en' and 'en.m' for desktop and mobile versions) with more than 100 views.
+```python
+  df_wiki_en = df_wiki_pageviews \
   .select("title", "wiki", "views") \
-  .where("views > 1000 AND wiki in ('en', 'en.m')") \
+  .where("views > 100 AND wiki in ('en', 'en.m')") \
   .cache()
-
 df_wiki_en
-title	wiki	views
-2020_Democratic_P...	en	3242
-Eurovision_Song_C...	en	2368
-Colin_McRae	en	2360
-Donald_trump	en	2223
-Comparison_of_onl...	en	1398
-Coronavirus	en	1872
--	en	136620
-Bombshell_(2019_f...	en	1084
-Brooklyn	en	1946
-2019–20_coronavir...	en	8313
-2019–20_Wuhan_cor...	en	1084
-Apple_Network_Server	en	3524
-Catholic_moral_th...	en	1328
-Bernie_Sanders	en	1297
-2019–20_coronavir...	en	1968
-Brooklyn	en	1139
-Charlie's_Angels_...	en	1006
-Corrupted_Blood_i...	en	1511
-Donald_trump	en	1526
-Coronavirus_disea...	en	1405
-only showing top 20 rows
-Group by title and order by page views to see the top pages
+```
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task2>)
 
+
+## Task 3:
+
+### Grouping the data by page title and order by page views to identify the most viewed pages.
+
+```PYTHON
 import pyspark.sql.functions as F
 
 df_wiki_en_totals = df_wiki_en \
@@ -70,67 +57,194 @@ df_wiki_en_totals = df_wiki_en \
 .agg(F.sum('views').alias('total_views'))
 
 df_wiki_en_totals.orderBy('total_views', ascending=False)
-title	total_views
-Main_Page	10939337
-United_States_Senate	5619797
--	3852360
-Special:Search	1538334
-2019–20_coronavir...	407042
-2020_Democratic_P...	260093
-Coronavirus	254861
-The_Invisible_Man...	233718
-Super_Tuesday	201077
-Colin_McRae	200219
-David_Byrne	189989
-2019–20_coronavir...	156803
-John_Mulaney	155605
-2020_South_Caroli...	152137
-AEW_Revolution	140503
-Boris_Johnson	120957
-Tom_Steyer	120926
-Dyatlov_Pass_inci...	117704
-Spanish_flu	108335
-2020_coronavirus_...	107653
-only showing top 20 rows
-Write Spark Dataframe to BigQuery table
-Write the Spark Dataframe to BigQuery table using BigQuery Storage connector. This will also create the table if it does not exist. The GCS bucket and BigQuery dataset must already exist.
+```
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task3>)
 
-If the GCS bucket and BigQuery dataset do not exist they will need to be created before running df.write
+- From the table, we can see that the most viewed pages are mostly related to Wikipedia's main page, with a total view of 10939337.
 
-Instructions here for creating a GCS bucket
-Instructions here for creating a BigQuery Dataset
-# Update to your GCS bucket
-gcs_bucket = 'dataproc-bucket-name'
 
-# Update to your BigQuery dataset name you created
-bq_dataset = 'dataset_name'
+## Task 4:
 
-# Enter BigQuery table name you want to create or overwite. 
-# If the table does not exist it will be created when you run the write function
-bq_table = 'wiki_total_pageviews'
+### Writing the transformed Spark DataFrame back into a new BigQuery table for further analysis.
+```python
+#Update to the bucket
+  gcs_bucket = 'amali_bucket'
 
-df_wiki_en_totals.write \
+# Update to the BigQuery dataset name created
+  bq_dataset = 'wikipedia'
+
+#Entering the BigQuery table name created.
+  bq_table = 'wikipedia_pageviews'
+  df_wiki_en_totals.write \
   .format("bigquery") \
   .option("table","{}.{}".format(bq_dataset, bq_table)) \
   .option("temporaryGcsBucket", gcs_bucket) \
   .mode('overwrite') \
   .save()
-Use BigQuery magic to query table
-Use the BigQuery magic to check if the data was created successfully in BigQuery. This will run the SQL query in BigQuery and the return the results
+```
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task4>)
 
-%%bigquery
-SELECT title, total_views
-FROM dataset_name.wiki_total_pageviews
-ORDER BY total_views DESC
-LIMIT 10
-title	total_views
-0	Main_Page	10939337
-1	United_States_Senate	5619797
-2	-	3852360
-3	Special:Search	1538334
-4	2019–20_coronavirus_outbreak	407042
-5	2020_Democratic_Party_presidential_primaries	260093
-6	Coronavirus	254861
-7	The_Invisible_Man_(2020_film)	233718
-8	Super_Tuesday	201077
-9	Colin_McRae	200219
+## Task 5: 
+
+### Use Spark SQL to retrieve the top 10 most-viewed pages where the title contains the word "United."
+- Query to fetch the top 10 most viewed pages where the title contains the word "United"
+```sql
+    select title, total_views
+    from encoded-region-425502-u2.wikipedia.wikipedia_pageviews
+      where title like "%United%"
+      order by total_views DESC
+      LIMIT 10
+```
+
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task5>)
+
+
+## Task 6:
+
+## Performing the same filtering, grouping, and querying operations using Spark SQL instead of DataFrames.
+
+## Creating a wiki_en temporary view
+
+```python
+df_wiki_en.createOrReplaceTempView("wiki_en")
+```
+
+### Using Spark SQL to query the wiki_pageviews temporary view and filter the results based on specific conditions where views is greater than 1000 and wiki is in english version
+
+```python
+  df_wiki_en = spark.sql("""
+    SELECT
+    title, wiki, views
+    FROM wiki_pageviews
+    WHERE views > 100 AND wiki in ('en', 'en.m')
+    """).cache()
+    df_wiki_en
+```
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task6a>)
+
+
+### Query to group the views by title from the wiki_en temporary view and orders the results by the total views in descending order
+
+ ```python
+  df_wiki_en_totals = spark.sql("""
+    SELECT
+    title,
+    SUM(views) as total_views
+    FROM wiki_en
+    GROUP BY title
+    ORDER BY total_views DESC
+    """)
+    df_wiki_en_totals
+ ```
+ ![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task6b>)
+
+ - The same results is obtained as the previous Dataframe operation (Grouping by title and order by page views to see the top pages). The results are ordered by total views in descending order.
+
+
+### Writing to BigQuery
+```python
+  gcs_bucket = 'lab_amali_4'
+# Update to your BigQuery dataset name you created
+  bq_dataset = 'wiki'
+  # Enter BigQuery table name you want to create or overwite.
+  # If the table does not exist it will be created when you run the write function
+  bq_table = 'wiki_total_pageviews'
+  df_wiki_en_totals.write \
+  .format("bigquery") \
+  .option("table","{}.{}".format(bq_dataset, bq_table)) \
+  .option("temporaryGcsBucket", gcs_bucket) \
+  .mode('overwrite') \
+  .save()
+```
+
+### Filtering the Data for Views Greater Than 100
+- Filtering the df_wiki_pageviews DataFrame to include only the rows where views are greater than 100 and the wiki is either ‘en’ or ‘en.m’. It also selects the columns datehour, wiki, and views, and caches the DataFrame for optimization.
+
+```python
+  df_wiki_en = df_wiki_pageviews \
+    .select("datehour", "wiki", "views") \
+    .where("views > 100 AND wiki in ('en', 'en.m')") \
+    .cache()
+    df_wiki_en
+```
+
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task6b>)
+
+- The results are filtered to include only the rows where views are greater than 100 and the wiki is in english version, where `2020-03-01 16:00:00` in english version has the most views with 143159.
+
+### Grouping the total views for each datehour by summing up the views column. It then orders the results by total_views in descending order
+
+```python
+  import pyspark.sql.functions as F
+  df_datehour_totals = df_wiki_en \
+  .groupBy("datehour") \
+  .agg(F.sum('views').alias('total_views'))
+  df_datehour_totals.orderBy('total_views', ascending=False)
+```
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/grouping total views>)
+
+- The results are ordered by total views in descending order. The results show the total views for each datehour and `2020-03-01 21:00:00` has the highest total views of 1642981.
+
+  ## Task 7:
+
+## Using DataFrame Visualization with Pandas plotting Capabilities
+
+### Converting the Spark DataFrame to Pandas DataFrame and set the datehour as the index
+```python
+  spark.conf.set("spark.sql.execution.arrow.enabled", "true")
+  %time pandas_datehour_totals = df_datehour_totals.toPandas()
+  pandas_datehour_totals.set_index('datehour', inplace=True)
+  pandas_datehour_totals.head()
+```
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/spark_dataframe_pandas_dataframe>)
+
+
+- Converting to pandas DataFrame and setting the datehour as the index. The results show the total views for each datehour to be able to plot the data using matplotlib.
+
+### Creating a line plot of the total views by datehour from the Pandas DataFrame pandas_datehour_totals. 
+
+```python
+import matplotlib.pyplot as plt
+  pandas_datehour_totals.plot(kind='line',figsize=(12,6));
+```
+
+![alt text](Images/total_vies_by_datehour.png)
+
+- From the graph , we can see that the total views are highest at `2020-03-01 21` with reference from the table (Refer to the grouping total views.png), `2020-03-01 21` has the highest total views of 1642981.
+
+### A new Spark DataFrame and pivoting the wiki column to create multiple rows for each wiki value.
+
+```python
+  import pyspark.sql.functions as F
+  df_wiki_totals = df_wiki_en \
+  .groupBy("datehour") \
+  .pivot("wiki") \
+  .agg(F.sum('views').alias('total_views'))
+  df_wiki_totals
+```
+- Grouping the data based on the datehour column, so all rows with the same hour are combined for further operations. Reshaping the data by turning unique values from the wiki column (en, en.m) into separate columns. Each column will represent the total views for that specific Wikipedia site. Calculating the total number of views for each Wikipedia site within each hour and assigns the result to the corresponding column created in the pivot step. 
+
+
+- Converting it to a Pandas DataFrame and plotting the data using matplotlib to visualize the total views for each Wikipedia site
+
+```python
+pandas_datahour_totals = pandas_datehour_totals.toPandas()
+pandas_datehour_totals.set_index('datehour', inplace=True)
+pandas_datehour_totals.head()
+```
+
+```python
+# Importing the Matplotlib library
+```
+
+```python
+# Creating a line chart using the pandas plot function
+pandas_datehour_totals.plot(kind='line',figsize=(12,6))
+```
+
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task7>)
+
+
+- Traffic for en generally decreases during early hours (around 03-01 06) and then starts to rise later in the day.Traffic for en.m spikes significantly early in the day (03-01 06) and then dips, eventually surpassing desktop traffic during the later hours.There is an interesting crossover point where en.m traffic overtakes en traffic.
+
+
