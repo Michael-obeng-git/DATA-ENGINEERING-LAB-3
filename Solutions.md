@@ -243,7 +243,7 @@ pandas_datehour_totals.head()
 pandas_datehour_totals.plot(kind='line',figsize=(12,6))
 ```
 
-![alt text](<WIKIPEDIA LAB\Lab Exercise 1/Lab_Exercise1_Task7>)
+![alt text](<WIKIPEDIA LAB\Lab Exercise 1/en_plot.png>)
 
 
 - Traffic for en generally decreases during early hours (around 03-01 06) and then starts to rise later in the day.Traffic for en.m spikes significantly early in the day (03-01 06) and then dips, eventually surpassing desktop traffic during the later hours.There is an interesting crossover point where en.m traffic overtakes en traffic.
