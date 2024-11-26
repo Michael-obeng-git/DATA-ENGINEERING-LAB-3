@@ -263,7 +263,7 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
 ```bash
   docker exec -it <container-id> /bin/bash
 ```
-![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Lab_Exercise2_Task1.png>)
+![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Exercise2_Task1.png>)
 
 
 - To see all topics, run
@@ -284,7 +284,7 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
 ```bash
   {"eventId": "1f547fd-e335-457e-9a1f-686cfbe903e3", "eventOffset": 10013, "eventPublisher": "device", "customerId": "CI00103", "data": {"devices": [{"deviceId": "D004", "temperature": 23, "measure": "C", "status": "SUCCESS"}]}, "eventTime": "2023-01-05 11:13:53.643895"}  {"eventId": "692e9999-1110-4441-a20e-fd76692e2c17", "eventOffset": 10014, "eventPublisher": "device", "customerId": "CI00109", "data": {"devices": [{"deviceId": "D003", "temperature": 18, "measure": "C", "status": "ERROR"}]}, "eventTime": 
 ```
-![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Lab_Exercise2_Task2.png>)
+![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Exercise2_Task2.png>)
 
 - Execute the code to create the kafka_df dataframe
  
@@ -296,6 +296,8 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
 ```
 
 ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Lab_Exercise2_Task3.png>)
+
+![alt text](<WIKIPEDIA LAB/Lab Exercise 2/all_running_streams.png>)
 
 
 - Run the rest of the code in the 03_reading_from_kafka.ipynb script and write the output to console sink to check the output (the last block of code)
