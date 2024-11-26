@@ -16,6 +16,7 @@ This dataset provides insights into web traffic, user behavior, and content tren
 
 Create a Dataproc cluster with Jupyter & Component Gateway on Google Cloud Platform (GCP).
 
+
 **Objective**
 
 By the end of this lab, you will be able to:
@@ -35,33 +36,51 @@ Visualize the total views across datehour using Pandas plotting.
 
 **Additional Resources**
 
+
 Repo Instructions Page (https://github.com/GoogleCloudDataproc/cloud-dataproc/blob/master/notebooks/python/1.1.%20BigQuery%20Storage%20%26%20Spark%20DataFrames%20-%20Python.ipynb)
+
 Steps to Use Spark SQL (https://github.com/GoogleCloudDataproc/cloud-dataproc/blob/master/notebooks/python/1.2.%20BigQuery%20Storage%20%26%20Spark%20SQL%20-%20Python.ipynb)
+
 Steps to Pandas Plotting (https://github.com/GoogleCloudDataproc/cloud-dataproc/blob/master/notebooks/python/3.1.%20Spark%20DataFrame%20%26%20Pandas%20Plotting%20-%20Python.ipynb)
 
+
 ****Lab Exercise 2:****
+
 **Creating a Streaming Data Pipeline with Kafka
+
 Overview**
+
 In this provisioned lab environment, you will create a streaming data pipeline using Kafka, providing a hands-on look at the Kafka Streams API. You will run a Java application that showcases a simple end-to-end data pipeline powered by Apache Kafka.
 
+
 **Prerequisites**
+
 An account on Cloud Skills Boost(https://www.cloudskillsboost.google/).
 
+
 **Objective**
+
 By the end of this lab, you will be able to:
 Start a Kafka cluster on a Compute Engine single machine.
 Write example input data to a Kafka topic using the console producer included in Kafka.
 Process the input data and inspect the output data using the console consumer.
+
 Setup and Requirements
+
 Before you click the Start Lab button, read and follow the instructions. The lab is timed, and you cannot pause it.
 
+
 **Tasks**
+
 Follow the instructions on the provided link to complete the tasks:
 
 **Set up Kafka.**
+
 Prepare the topics and the input data.
 Process the input data with Kafka Streams.
 Inspect the output data.
 Stop the Kafka cluster.
+
 Additional Resources
+
 Link to Lab (https://www.cloudskillsboost.google/course_templates/703/labs/502033)
