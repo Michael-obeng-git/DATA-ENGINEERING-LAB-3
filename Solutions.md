@@ -306,7 +306,7 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
 ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/all_running_streams.png>)
 
 
-- Run the rest of the code in the 03_reading_from_kafka.ipynb script and write the output to console sink to check the output (the last block of code)
+- Run the rest of the code in the Kafka_streaming.ipynb script and write the output to console sink to check the output (the last block of code)
 - 
   ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/interactive.png>)
 
