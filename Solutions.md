@@ -265,6 +265,11 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
 ```
 ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Exercise2_Task1.png>)
 
+- Create a Kafka topic on your broker with 3 partitions and write a command to describe the Kafka topic
+  ```bash
+  kafka-topics --create --topic test-topic-1 --partitions 3 --replication-factor 1 --bootstrap-server localhost:29092
+  ```
+
 
 - To see all topics, run
 ```bash
@@ -273,11 +278,10 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
 ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/all_topics.png>)
 
 
-**Writing Spark to read the device data from the topic and writing it a console sink**
-- A running Docker container named ed-spark-jupyter-lab (or equivalent) for Spark and Jupyter Lab to be able to start the Spark session in the Jupyter Lab.
+- Create a Kafka producer and post a sample device data to the Kafka topic-test-1
 
 ```bash
-  kafka-console-producer --topic device-data --bootstrap-server localhost:29092
+  kafka-console-producer --topic test-topic-1 --bootstrap-server localhost:29092
 ```
 **Sample JSON data in the opened terminal**
 
@@ -285,8 +289,6 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
   {"eventId": "1f547fd-e335-457e-9a1f-686cfbe903e3", "eventOffset": 10013, "eventPublisher": "device", "customerId": "CI00103", "data": {"devices": [{"deviceId": "D004", "temperature": 23, "measure": "C", "status": "SUCCESS"}]}, "eventTime": "2023-01-05 11:13:53.643895"}  {"eventId": "692e9999-1110-4441-a20e-fd76692e2c17", "eventOffset": 10014, "eventPublisher": "device", "customerId": "CI00109", "data": {"devices": [{"deviceId": "D003", "temperature": 18, "measure": "C", "status": "ERROR"}]}, "eventTime": 
 ```
 ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Exercise2_Task2.png>)
-
-- Execute the code to create the kafka_df dataframe
  
 
 **Adding more data**
