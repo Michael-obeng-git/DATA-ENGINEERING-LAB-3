@@ -269,6 +269,10 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
   ```bash
   kafka-topics --create --topic test-topic-1 --partitions 3 --replication-factor 1 --bootstrap-server localhost:29092
   ```
+  ```bash
+   kafka-topics --describe --topic test-topic-1 --bootstrap-server localhost:29092
+   ```
+  ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/create-describe.png>)
 
 
 - To see all topics, run
