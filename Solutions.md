@@ -274,7 +274,7 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
   ```bash
    kafka-topics --describe --topic test-topic-1 --bootstrap-server localhost:29092
    ```
-  ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/create-describe.png>)
+  ![alt text](<WIKIPEDIA _LAB/Lab Exercise 2/create-describe.png>)
 
 
 - To see all topics, run
@@ -285,8 +285,10 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
 
 Task 3: 
 Write a spark application to read the device data from the topic and to write it a console sink
-[Link Text](<WIKIPEDIA_LAB/Lab Exercise 2/Kafka_Streaming.ipynb>)
 
+[Kafka_Streaming](<WIKIPEDIA LAB/Lab Exercise 2/Kafka_Streaming.ipynb>)
+
+Task 4: 
 
 - Create a Kafka producer and post a sample device data to the Kafka topic-test-1
 
@@ -299,7 +301,22 @@ Write a spark application to read the device data from the topic and to write it
   {"eventId": "1f547fd-e335-457e-9a1f-686cfbe903e3", "eventOffset": 10013, "eventPublisher": "device", "customerId": "CI00103", "data": {"devices": [{"deviceId": "D004", "temperature": 23, "measure": "C", "status": "SUCCESS"}]}, "eventTime": "2023-01-05 11:13:53.643895"}  {"eventId": "692e9999-1110-4441-a20e-fd76692e2c17", "eventOffset": 10014, "eventPublisher": "device", "customerId": "CI00109", "data": {"devices": [{"deviceId": "D003", "temperature": 18, "measure": "C", "status": "ERROR"}]}, "eventTime": 
 ```
 ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Exercise2_Task2.png>)
- 
+
+Task 5:
+ Write the stream to the console
+```bash
+kafka-console-consumer --topic test-topic-1 --bootstrap-server localhost:9092 --from-beginning
+```
+
+- produce messages to the Kafka topic using the command prompt
+  
+![alt text](<WIKIPEDIA LAB/Lab Exercise 2/stream_produce.png>)
+
+- Stream Messages from the Topic
+
+![alt text](<WIKIPEDIA LAB/Lab Exercise 2/streaming.png>)
+
+ - This will stream messages from the beginning of the topic and print them to the console.
 
 **Adding more data**
 ```bash
