@@ -255,7 +255,7 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
 # EXERCISE 2
 
 
-
+## Task 1:
 - Opening an interactive shell with your docker container using command prompt
 
 - Running containers 
@@ -264,6 +264,8 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
   docker exec -it <container-id> /bin/bash
 ```
 ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Exercise2_Task1.png>)
+
+## Task 2:
 
 - Create a Kafka topic on your broker with 3 partitions and write a command to describe the Kafka topic
   ```bash
@@ -280,6 +282,10 @@ pandas_datehour_totals.plot(kind='line',figsize=(12,6))
   kafka-topics --list --bootstrap-server localhost:29092
 ```
 ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/all_topics.png>)
+
+Task 3: 
+Write a spark application to read the device data from the topic and to write it a console sink
+[Link Text](<WIKIPEDIA_LAB/Lab Exercise 2/Kafka_Streaming.ipynb>)
 
 
 - Create a Kafka producer and post a sample device data to the Kafka topic-test-1
