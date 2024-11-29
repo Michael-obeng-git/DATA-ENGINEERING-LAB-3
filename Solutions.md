@@ -303,7 +303,9 @@ Task 4:
 ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Exercise2_Task2.png>)
 
 Task 5:
+
  Write the stream to the console
+ 
 ```bash
 kafka-console-consumer --topic test-topic-1 --bootstrap-server localhost:9092 --from-beginning
 ```
@@ -318,6 +320,8 @@ kafka-console-consumer --topic test-topic-1 --bootstrap-server localhost:9092 --
 
  - This will stream messages from the beginning of the topic and print them to the console.
 
+   ## Task 6:
+
 **Adding more data**
 ```bash
 {"eventId": "a25e37a0-1488-411c-bb6d-f3f14e9bdd39", "eventOffset": 10061, "eventPublisher": "device", "customerId": "CI00115", "data": {"devices": [{"deviceId": "D004", "temperature": 27, "measure": "C", "status": "STANDBY"}, {"deviceId": "D003", "temperature": 4, "measure": "C", "status": "STANDBY"}, {"deviceId": "D003", "temperature": 12, "measure": "C", "status": "STANDBY"}]}, "eventTime": "2023-01-05 11:13:53.650859"}
@@ -325,6 +329,10 @@ kafka-console-consumer --topic test-topic-1 --bootstrap-server localhost:9092 --
 ```
 
 ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/Lab_Exercise2_Task3.png>)
+
+## Task 7:
+
+- Inspect the output data in your docker container logs
 
 ![alt text](<WIKIPEDIA LAB/Lab Exercise 2/all_running_streams.png>)
 
